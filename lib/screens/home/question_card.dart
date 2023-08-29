@@ -11,7 +11,7 @@ import 'package:quizzems/widgets/app_icons.dart';
 class QuestionCard extends GetView<QuestionPaperController> {
   const QuestionCard({super.key, required this.model});
 
-  final QuesitonPaperModel model;
+  final QuestionPaperModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,10 @@ class QuestionCard extends GetView<QuestionPaperController> {
       ),
       child: InkWell(
         onTap: () {
-          controller.navigateToQuestions(paper: model);
+          controller.navigateToQuestions(
+            paper: model,
+            tryAgain: false,
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(padding),

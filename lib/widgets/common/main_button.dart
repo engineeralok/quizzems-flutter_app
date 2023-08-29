@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:quizzems/configs/themes/app_colors.dart';
+import 'package:quizzems/configs/themes/ui_parameters.dart';
 
 class MainButton extends StatelessWidget {
   final String title;
@@ -23,6 +25,7 @@ class MainButton extends StatelessWidget {
         height: 55,
         child: InkWell(
           onTap: enabled == false ? null : onTap,
+          borderRadius: BorderRadius.circular(15),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
@@ -30,16 +33,20 @@ class MainButton extends StatelessWidget {
             ),
             width: double.maxFinite,
             padding: const EdgeInsets.all(10.0),
-            child: child ??
-                Center(
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: onSurfaceTextColor,
+            child: Ink(
+              child: child ??
+                  Center(
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Get.isDarkMode
+                            ? onSurfaceTextColor
+                            : Theme.of(context).primaryColor,
+                      ),
                     ),
                   ),
-                ),
+            ),
           ),
         ),
       ),

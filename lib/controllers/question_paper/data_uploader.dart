@@ -30,12 +30,12 @@ class DataUploader extends GetxController {
         .where((path) =>
             path.startsWith("assets/DB/papers") && path.contains(".json"))
         .toList();
-    List<QuesitonPaperModel> questionPapers = [];
+    List<QuestionPaperModel> questionPapers = [];
     // print(papersInAssets);
     for (var paper in papersInAssets) {
       String stringPaperContent = await rootBundle.loadString(paper);
       questionPapers
-          .add(QuesitonPaperModel.fromJson(json.decode(stringPaperContent)));
+          .add(QuestionPaperModel.fromJson(json.decode(stringPaperContent)));
       // print(stringPaperContent);
     }
     // print("items number: ${questionPapers[0].id}");

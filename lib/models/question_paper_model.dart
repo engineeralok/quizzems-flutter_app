@@ -6,33 +6,33 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-QuesitonPaperModel quesitonPaperModelFromJson(String str) =>
-    QuesitonPaperModel.fromJson(json.decode(str));
+QuestionPaperModel quesitonPaperModelFromJson(String str) =>
+    QuestionPaperModel.fromJson(json.decode(str));
 
-String quesitonPaperModelToJson(QuesitonPaperModel data) =>
+String quesitonPaperModelToJson(QuestionPaperModel data) =>
     json.encode(data.toJson());
 
-class QuesitonPaperModel {
+class QuestionPaperModel {
   String? id;
   String? title;
   String? imageUrl;
   String? description;
-  int? timeSeconds;
+  int timeSeconds;
   List<Question>? questions;
   int questionCount;
 
-  QuesitonPaperModel({
+  QuestionPaperModel({
     this.id,
     this.title,
     this.imageUrl,
     this.description,
-    this.timeSeconds,
+    required this.timeSeconds,
     this.questions,
     required this.questionCount,
   });
 
-  factory QuesitonPaperModel.fromJson(Map<String, dynamic> json) =>
-      QuesitonPaperModel(
+  factory QuestionPaperModel.fromJson(Map<String, dynamic> json) =>
+      QuestionPaperModel(
         id: json["id"],
         title: json["title"],
         imageUrl: json["image_url"],
@@ -45,9 +45,9 @@ class QuesitonPaperModel {
                 json["questions"]!.map((x) => Question.fromJson(x))),
       );
 
-  factory QuesitonPaperModel.fromSnapshot(
+  factory QuestionPaperModel.fromSnapshot(
           DocumentSnapshot<Map<String, dynamic>> json) =>
-      QuesitonPaperModel(
+      QuestionPaperModel(
         id: json.id,
         title: json["title"],
         imageUrl: json["imageUrl"] as String,
@@ -57,7 +57,7 @@ class QuesitonPaperModel {
         questions: [],
       );
 
-  String timeInMinutes() => "${(timeSeconds! / 60).ceil()} mins";
+  String timeInMinutes() => "${(timeSeconds / 60).ceil()} mins";
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -73,13 +73,14 @@ class QuesitonPaperModel {
 
 class Question {
   String? id;
-  String? question;
+  String question;
   List<Answer>? answers;
   String correctAnswer; // Change the type to String
+  String? selectedAnswer; // Change the type to String
 
   Question({
     this.id,
-    this.question,
+    required this.question,
     this.answers,
     required this.correctAnswer,
   });
@@ -92,6 +93,12 @@ class Question {
             : List<Answer>.from(json["answers"].map((x) => Answer.fromJson(x))),
         correctAnswer: json["correct_answer"], // Keep it as a string
       );
+
+  Question.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+      : id = snapshot.id,
+        question = snapshot['question'],
+        answers = [],
+        correctAnswer = snapshot['correctAnswer'];
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -116,6 +123,11 @@ class Answer {
         identifier: json["identifier"], // No need to map to enum here
         answer: json["Answer"],
       );
+
+  Answer.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+      : identifier =
+            snapshot["identifier"] as String?, // No need to map to enum here
+        answer = snapshot["answer"] as String?;
 
   Map<String, dynamic> toJson() => {
         "identifier": identifier,
